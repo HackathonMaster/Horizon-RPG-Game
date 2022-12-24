@@ -1,66 +1,153 @@
 import time, os, sys
 from time import sleep
-from Classes.WeaponClass import* #only for str_to_class function
+from Classes.WeaponClass import* #only used in str_to_class function
+from keyPress import KBHit #used to skip typing effect
 
 
-#printing text imitating typing
-def typeText(text, typeSpeed = .04):
-  for character in text:
-    sys.stdout.write(character)
-    sys.stdout.flush()
-    time.sleep(typeSpeed)
+def instructions():
+    """
+    Prompts the user if they want to see instructions and story.
 
-def typeInput(text, typeSpeed = .04):
-  for character in text:
-    sys.stdout.write(character)
-    sys.stdout.flush()
-    time.sleep(typeSpeed)
-  value = input()  
-  return value 
+    Returns False if user WANTS to see instructions/story
+    Returns True if user does NOT want to see instructions/story
+    """
+    skip = ""
+    while skip.upper() != 'Y' and skip.upper() != 'N':
+        clear()
+        skip = typeInput("Would you like to see the instructions and the story? [Y/N]")
+    typeText("\nYou can skip any line of text anytime by pressing [enter] or [return] on your keyboard")
+    pCont()
 
-#clear terminal
-def clear():
-  if os.name == 'nt':
-    os.system("cls")
-  else:
-    os.system("clear")
-  # print('\033[2J\033[H')
+    if skip.upper() == 'Y':
+        return False
+    return True
 
-def pCont():
-  input(yellow + "\n\nPress enter to continue" + reset)
-
-def str_to_class(str):
-  return getattr(sys.modules[__name__], str)
 
 def intro():
-  print("*******************************")
-  sleep(.5)
-  print("*******************************")
-  sleep(.5)
-  print("Welcome to the Horizon RPG Game")
-  sleep(.5)
-  print("*******************************")
-  sleep(.5)
-  print("*******************************")
-  sleep(2.5)
-  clear()
-  typeText("You got kidnapped by the Carja tribe and you are now stuck in the Sun Ring")
-  sleep(.5)
-  typeText("\nYour only way to escape is to fight the machines in the arena until you prove yourself to be a worthy warrior")
-  sleep(1)
-  typeText("\n\nTo win your freedom back, you must win every machine trial in the arena and please Helis enough to let you go")
-  sleep(.5)
-  pCont()
-  clear()
-  typeText("You will have to fight 5 machines, one each round with varrying difficulties")
-  sleep(1)
-  typeText("\n\nYou will be randomly assigned 3 weapon classes and you will have the choice to pick one weapon from each class")
-  sleep(1)
-  typeText("\n\nGood Luck and Happy Hunting!!!")
-  sleep(.5)
-  pCont()
-  clear()
+    """
+    Greets player and introduces basic game mechanics
+    """
+    print("*******************************")
+    sleep(.5)
+    print("*******************************")
+    sleep(.5)
+    print("Welcome to the Horizon RPG Game")
+    sleep(.5)
+    print("*******************************")
+    sleep(.5)
+    print("*******************************")
+    sleep(2.5)
+    
+    skip = instructions()
 
+    if not skip:
+        clear()
+        typeText("You got kidnapped by the Carja tribe and you are now stuck in the Sun Ring", sleep = .5)
+        typeText("\nYour only way to escape is to fight the machines in the arena until you prove yourself to be a worthy warrior", sleep = 1)
+        typeText("\n\nTo win your freedom back, you must win every machine trial in the arena and please Helis enough to let you go", sleep = .5)
+        pCont()
+        typeText("You will have to fight 5 machines, one each round with varrying difficulties", sleep = 1)
+        typeText("\n\nYou will be randomly assigned 3 weapon classes and you will have the choice to pick one weapon from each class", sleep = 1)
+        typeText("\n\nGood Luck and Happy Hunting!!!", sleep = .5)
+        pCont()
+
+    return skip
+
+
+def typeText(text, typeSpeed = .03, sleep = 0):
+    """
+    Prints text (imitating typing)
+
+    Checks for keyboard hits and if the 'enter' (Windows) or 'return' (Mac) key is hit,
+    the typing effect is skipped for the rest of the text
+
+    Restores original terminal settings at completion
+
+    Paramater text: text that needs to be printed
+    Precondition: text is a string
+
+    Paramater typeSpeed: pause duration (in seconds) between characters
+    Precondition: typeSpeed is a float or an int
+
+    Paramater sleep: pause duration (in seconds) AFTER finishing printing text
+    Precondition: sleep is a float or an int
+    """
+    keyboard = KBHit()
+
+    for character in text:
+        sys.stdout.write(character)
+        sys.stdout.flush()
+
+        if keyboard.keyboardHit(): 
+            c = keyboard.getChar()
+            if ord(c) == 10: #ASCII code of 'enter' or 'return' key
+                typeSpeed = 0
+            sleep = 0
+
+        time.sleep(typeSpeed)
+    time.sleep(sleep)
+    
+    keyboard.set_normal_term() #Restore original terminal settings
+
+
+def typeInput(text, typeSpeed = .03):
+    """
+    Prints text (imitating typing) with an input prompt
+
+    Checks for keyboard hits and if the 'enter' (Windows) or 'return' (Mac) key is hit,
+    the typing effect is skipped for the rest of the text
+
+    Paramater text: text that needs to be printed
+    Precondition: text is a string
+
+    Paramater typeSpeed: pause duration (in seconds) between characters
+    Precondition: typeSpeed is a float or an int
+    """
+    keyboard = KBHit()
+
+    for character in text:
+        sys.stdout.write(character)
+        sys.stdout.flush()
+
+        if keyboard.keyboardHit(): 
+            c = keyboard.getChar()
+            if ord(c) == 10: #ASCII code for the 'enter' or 'return' key
+                typeSpeed = 0
+
+        time.sleep(typeSpeed)
+
+    keyboard.set_normal_term() #Restore original terminal settings to display user inputs
+    
+    value = input("\n>> " )  
+    return value 
+
+
+def clear():
+    """
+    Wipes the terminal with no previous history
+    """
+    if os.name == 'nt':
+        os.system("cls")
+    else:
+        os.system("clear")
+
+
+def pCont():
+    """
+    Prompts player to press 'enter' to continue and clears the screen
+    """
+    input(yellow + "\n\nPress [enter] to continue" + reset)
+    clear()
+
+
+def str_to_class(str):
+    """
+    Used to convert str to a class type
+
+    Paramater str: to convert to class type
+    Precondition: str is a string
+    """
+    return getattr(sys.modules[__name__], str)
 
 
 #colors

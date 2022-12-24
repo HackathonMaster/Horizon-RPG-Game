@@ -72,7 +72,6 @@ weaponsList = {
             "Critical Hit Chance" : "5%",
             "Shots Before Explosion" : 3,
             "Explosion Damage Multiplier" : 2.25,
-            "Explosion Stamina Cost" : 5
         },
 
         "Slicing Shredder Gauntlet"  : {
@@ -80,7 +79,6 @@ weaponsList = {
             "Critical Hit Chance" : "5%",
             "Shots Before Explosion" : 2,
             "Explosion Damage Multiplier" : 1.5,
-            "Explosion Stamina Cost" : 5
         },
 
         "Sunhawk Shredder Gauntlet"  : {
@@ -88,7 +86,6 @@ weaponsList = {
             "Critical Hit Chance" : "5%",
             "Shots Before Explosion" : 3,
             "Explosion Damage Multiplier" : 1.5,
-            "Explosion Stamina Cost" : 5
         }
 
     },

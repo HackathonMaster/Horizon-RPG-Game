@@ -1,8 +1,19 @@
 from Dictionaries.weapons import weaponsList
 
 class Weapon(object):
+    """
+    A class to represent all weapons
+    """
+    # Attribute _name: weapon's name
+    # Invariant: _name is a string
 
-    #initializer
+    # Attribute _damage: weapon's damage
+    # Invariant: _damage is an int
+
+    # Attribute _criticalHeat: weapon's critical hit chance (converted from percent to decimal)
+    # Invariant: _criticalHit is a float
+
+    #INITIALIZER
     def __init__(self, name, type):
         """
         Initializes the weapon with common attributes across all weapons,
@@ -23,7 +34,7 @@ class Weapon(object):
         # self.coilSlots = coilSlots
         # self.coils = {}
 
-    #getters
+    #GETTERS
     def name(self):
         """
         Returns the name of any weapon
@@ -36,7 +47,7 @@ class Weapon(object):
         """
         return self._damage
 
-    #other functions
+    #OTHER FUNCTIONS
     def __str__(self):
         """
         Returns a string representation of any weapon
@@ -52,8 +63,16 @@ class Weapon(object):
 
 
 class Spears(Weapon):
+    """
+    A class to represent all spears
+    """
+    # Attribute _pwrDamage: spear's power attack damage
+    # Invariant: _pwrDamage in an int
 
-    #initializer
+    # Attribute _staminaCost: spear's power attack stamina cost
+    # Invariant: _staminaCost is an int
+
+    #INITIALIZER
     def __init__(self, name):
         """
         Initializes the spear with its respective attributes retrieving them 
@@ -71,8 +90,16 @@ class Spears(Weapon):
 
 
 class HunterBows(Weapon):
+    """
+    A class to represent all hunter bows
+    """
+    # Attribute _maxStack: max # of arrows allowed for stacking
+    # Invariant: _maxStack is an int
+
+    # Attribute _staminaCost: bow's stamina cost for each arrow stacked
+    # Invariant: _staminaCost is an int
     
-    #initializer
+    #INITIALIZER
     def __init__(self, name):
         """
         Initializes the hunter bow with its respective attributes retrieving them 
@@ -90,14 +117,17 @@ class HunterBows(Weapon):
 
 
 class Blastslings(Weapon):
-    
-    #initializer
+    """
+    A class to represent all blastslings
+    """
+
+    #INITIALIZER
     def __init__(self, name):
         """
         Initializes the blastsling with its respective attributes retrieving them 
         directly from the weapons dictionary
 
-        Super class is called only to intialize the name, damage, and critical 
+        Super class is only called to intialize the name, damage, and critical 
         hit chance attributes
 
         Parameter name: name of the spear and acts as an ID to retrieve other attributes
@@ -107,8 +137,16 @@ class Blastslings(Weapon):
 
 
 class ShredderGauntlets(Weapon):
+    """
+    A class to represent all shredder gauntlets
+    """
+    # Attribute _shotsExplos: number of shots required before explosion
+    # Invariant: _shotsExplos is an int
 
-    #initializer
+    # Attribute _explosDamage: shredder gauntlet's explosion shot damage 
+    # Invariant: _explosDamage is a float
+
+    #INITIALIZER
     def __init__(self, name):
         """
         Initializes the shredder gauntlet with its respective attributes retrieving them 
@@ -123,13 +161,20 @@ class ShredderGauntlets(Weapon):
         
         super().__init__(name, 'Shredder Gauntlets')
         self._shotsExplos = weaponsList['Shredder Gauntlets'][name]['Shots Before Explosion']
-        self._explosDmgMultipler = weaponsList['Shredder Gauntlets'][name]['Explosion Damage Multiplier']
-        self._staminaCost = weaponsList['Shredder Gauntlets'][name]['Explosion Stamina Cost']
+        self._explosDamage = self._damage * weaponsList['Shredder Gauntlets'][name]['Explosion Damage Multiplier']
 
 
 class SpikeThrowers(Weapon):
+    """
+    A class to represent all spike throwers
+    """
+    # Attribute _pwrDamage: spike thrower's explosive attack damage
+    # Invariant: _pwrDamage in an int
 
-    #initializer
+    # Attribute _staminaCost: spike thrower's explosive spike stamina cost
+    # Invariant: _staminaCost is an int
+
+    #INITIALIZER
     def __init__(self, name):
         """
         Initializes the spike thrower with its respective attributes retrieving them 
